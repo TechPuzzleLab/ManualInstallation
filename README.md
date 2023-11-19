@@ -3,7 +3,7 @@ Manual Installation for Windows
 
 ### How to do it?
 
-Certainly, here's a concise guide to install Windows using Command Prompt (CMD):
+Certainly, here's a concise guide to installing Windows using Command Prompt (CMD):
 
 1. **Prepare a Bootable USB:**
    - Use a tool like Rufus to create a bootable USB drive with the Windows installation files.
@@ -18,25 +18,69 @@ Certainly, here's a concise guide to install Windows using Command Prompt (CMD):
 4. **Access Command Prompt:**
    - During Windows installation, press `Shift` + `F10` to open Command Prompt.
 
-5. **Diskpart:**
-   - Type `diskpart` and press Enter.
-   - Use the following commands:
-     - `list disk`: Display available disks.
-     - `select disk X` (replace X with the disk number of your target drive).
-     - `clean`: Erase the data on the selected disk.
-     - `create partition primary`: Create a primary partition.
-     - `select partition 1`: Select the created partition.
-     - `format fs=ntfs quick`: Format the partition as NTFS.
-     - `active`: Set the partition as active.
-     - `exit`: Exit Diskpart.
+5. **Diskpart**
+   - Use these commands
+     
+     
+    ```
+    Diskpart
+    ```
+    Once Diskpart is launched:
+    ```
+    Sel disk 0
+    ```
+    Then:
+   ```
+    Convert gpt
+    ```
+   Once/After Converted:
+    ```
+    Create part efi size=500
+    ```
+    After Partition Is Created:
+   ```
+    Format fs=fat32 quick
+    ```
+   Use this command to assign that partition to:
+    ```
+    Assign letter w
+    ```
+    After that, we can now make the C drive
+   ```
+    Create part primary
+    ```
+   Create a partition again
+   ```
+    Create part primary
+    ```
+   Again, format it, but in a different type
+   ```
+    Format fs=ntfs quick
+    ```
+   Assign it as
+    ```
+    Assign letter c
+    ```
+    After that:
+    ```
+    exit
+    ```
 
-6. **Apply the Windows Image:**
-   - Type `dism /apply-image /imagefile:X:\sources\install.wim /index:1 /applydir:Y:\` (replace X and Y with your actual drive letters).
+6. **Install Windows (By Dism)**
 
-7. **Boot Configuration Data (BCD):**
-   - Type `bcdboot Y:\Windows /s X:` (replace X and Y with your actual drive letters).
+ - Type `CD /d D:\sources`
+ - Then Dism /apply-image /imagefile:install.wim /index:1 /applydir:C:\
+ - If you want to get info of the WIM file, type `Dism /get-wiminfo /imagefile:install.wim`
+ - It will take time to apply the image from the wim file/s to C
 
-8. **Complete Setup:**
-   - Close the Command Prompt and proceed with the on-screen instructions to complete the Windows installation.
+7. **Bcdboot**
+   -Use this command
+   ```
+   Bcdboot C:\Windows /s W:
+   ```
+8. **Reboot**
+   - Type `Wpeutil reboot` to reboot/restart your PC
+  
 
-Ensure you replace X and Y with the appropriate drive letters based on your system configuration.
+That's all for today :) 
+   Comment what you want to suggest.
